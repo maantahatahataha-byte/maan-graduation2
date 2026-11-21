@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دعوة حفل تخرج | معن طه - جامعة المشرق</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Amiri & Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Tone.js for royal chime sound effect on envelope open -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Tajawal', 'sans-serif'],
+                        serif: ['Amiri', 'serif'],
+                    },
+                    colors: {
+                        royal: {
+                            800: '#101d36',
+                            900: '#08101e',
+                            950: '#050a14',
+                        },
+                        gold: {
+                            100: '#fbf5e6',
+                            200: '#f3e1b6',
+                            300: '#e8c882',
+                            400: '#dfb154',
+                            500: '#d4af37',
+                            600: '#b08b22',
+                            700: '#8a6914',
+                        },
+                        ivory: {
+                            50: '#fdfbf7',
+                            100: '#f7f2e7',
+                            200: '#ede3cf',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base & Ambient Background */
+        body {
+            background-color: #08101e;
+            color: #fdfbf7;
+            overflow: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .ambient-photo-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background-color: #08101e;
+            background-image: url('IMG_0508.heic');
+            background-size: cover;
+            background-position: top center;
+        }
+
+        .ambient-photo-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            opacity: 0.28;
+            filter: blur(8px) saturate(1.15);
+            transform: scale(1.06);
+        }
+
+        .ambient-vignette {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 42%, rgba(8, 16, 30, 0.52) 0%, rgba(5, 10, 20, 0.94) 100%);
+        }
+
+        /* Metallic Gold Shimmer */
+        .text-gold-metallic {
+            background: linear-gradient(135deg, #f3e1b6 0%, #d4af37 45%, #fff5d6 55%, #b08b22 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 4.5s linear infinite;
+        }
+
+        @keyframes shine {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
+
+        /* ================= 3D ENVELOPE STYLES ================= */
+        .envelope-stage {
+            perspective: 1400px;
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            width: min(92vw, 440px);
+            height: min(62vw, 295px);
+            transform-style: preserve-3d;
+            cursor: pointer;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            filter: drop-shadow(0 28px 45px rgba(0, 0, 0, 0.8));
+        }
+
+        .envelope-wrapper:hover:not(.is-open) {
+            transform: translateY(-6px) scale(1.02);
+        }
+
+        .envelope-back {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(145deg, #0e1b36 0%, #060c18 100%);
+            border-radius: 16px;
+            border: 1.5px solid rgba(212, 175, 55, 0.5);
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.65);
+        }
+
+        .envelope-inner-card {
+            position: absolute;
+            left: 6%;
+            right: 6%;
+            bottom: 8%;
+            height: 84%;
+            background: linear-gradient(180deg, #fdfbf7 0%, #f3e8d2 100%);
+            border-radius: 12px;
+            border: 1px solid #d4af37;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.85rem;
+            text-align: center;
+            color: #08101e;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.35);
+            transition: transform 0.9s cubic-bezier(0.34, 1.4, 0.64, 1) 0.45s;
+        }
+
+        .envelope-wrapper.is-open .envelope-inner-card {
+            transform: translateY(-68%) scale(1.03);
+        }
+
+        .envelope-pocket {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            border-radius: 16px;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .envelope-pocket::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #122140 0%, #08101e 50%, #060c18 100%);
+            clip-path: polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%);
+            border-bottom: 2px solid rgba(212, 175, 55, 0.55);
+        }
+
+        .envelope-pocket::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(212, 175, 55, 0.14) 0%, rgba(8, 16, 30, 0.96) 100%);
+            clip-path: polygon(0 100%, 50% 48%, 100% 100%);
+            border-top: 1px solid rgba(212, 175, 55, 0.45);
+        }
+
+        .pocket-gold-trim {
+            position: absolute;
+            inset: 0;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 58%;
+            z-index: 5;
+            transform-origin: top center;
+            transform-style: preserve-3d;
+            transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s linear 0.35s;
+        }
+
+        .envelope-flap-front {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, #142547 0%, #091224 100%);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            border-top: 2px solid rgba(212, 175, 55, 0.65);
+            backface-visibility: hidden;
+        }
+
+        .envelope-flap-back {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, #192d57 0%, #0c172e 100%);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform: rotateX(180deg);
+            backface-visibility: hidden;
+        }
+
+        .envelope-wrapper.is-open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .wax-seal {
+            position: absolute;
+            top: 52%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 6;
+            width: 74px;
+            height: 74px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 32% 30%, #fff0b8 0%, #d4af37 45%, #8a6914 90%, #5e4509 100%);
+            box-shadow:
+                0 8px 20px rgba(0, 0, 0, 0.65),
+                inset 0 2px 4px rgba(255, 255, 255, 0.7),
+                inset 0 -3px 6px rgba(74, 52, 5, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.5s ease, opacity 0.4s ease;
+            animation: sealPulse 2.6s infinite ease-in-out;
+        }
+
+        .wax-seal::before {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(94, 69, 9, 0.55);
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.45);
+        }
+
+        @keyframes sealPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.06); }
+        }
+
+        .envelope-wrapper.is-open .wax-seal {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5);
+            pointer-events: none;
+        }
+
+        /* ================= INTERACTIVE MULTI-PAGE BOOKLET ================= */
+        .booklet-container {
+            transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .page-card {
+            position: absolute;
+            inset: 0;
+            border-radius: 26px;
+            background: rgba(8, 16, 30, 0.92);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1.5px solid rgba(212, 175, 55, 0.45);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            transition: transform 0.65s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.55s ease;
+            backface-visibility: hidden;
+            overflow: hidden;
+        }
+
+        .page-active {
+            opacity: 1;
+            transform: translateX(0) scale(1) rotateY(0deg);
+            pointer-events: auto;
+            z-index: 10;
+        }
+
+        .page-next {
+            opacity: 0;
+            transform: translateX(-18%) scale(0.94) rotateY(-12deg);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .page-prev {
+            opacity: 0;
+            transform: translateX(18%) scale(0.94) rotateY(12deg);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* Portrait Container on Page 1 */
+        .portrait-frame {
+            background-image: url('IMG_0508.heic');
+            background-size: cover;
+            background-position: top center;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65), 0 0 0 2px rgba(212, 175, 55, 0.55);
+        }
+
+        .page-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+        .page-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .page-scroll::-webkit-scrollbar-thumb {
+            background: rgba(212, 175, 55, 0.45);
+            border-radius: 9999px;
+        }
+
+        .royal-glass {
+            background: rgba(16, 29, 54, 0.62);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-gold-500 selection:text-royal-950">
+
+    <!-- Hidden File Input for Optional Local Photo Swap -->
+    <input type="file" id="photoUploadInput" accept="image/*" class="hidden" onchange="handleLocalPhotoChange(event)">
+
+    <!-- Ambient Blurred Photo Background -->
+    <div id="ambientPhotoBg" class="ambient-photo-bg">
+        <img 
+            id="ambientBgImg"
+            src="IMG_0508.heic" 
+            alt="خلفية الخريج معن طه"
+        >
+    </div>
+    <div class="ambient-vignette"></div>
+
+    <!-- Gold Confetti & Dust Canvas -->
+    <canvas id="confettiCanvas" class="fixed inset-0 pointer-events-none z-40"></canvas>
+
+    <!-- ===================================================================== -->
+    <!-- STAGE 1: 3D INTERACTIVE LUXURY ENVELOPE                               -->
+    <!-- ===================================================================== -->
+    <section id="envelopeStage" class="envelope-stage fixed inset-0 z-30 flex flex-col items-center justify-center px-4">
+        
+        <!-- Top Greeting Hint -->
+        <div class="text-center mb-6 space-y-1.5">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full royal-glass text-gold-200 text-xs sm:text-sm font-semibold">
+                <i class="fa-solid fa-graduation-cap text-gold-400"></i>
+                <span>دعوة ملكية خاصة</span>
+            </span>
+            <h2 class="font-serif text-2xl sm:text-3xl text-ivory-50 font-bold tracking-wide">
+                حفل تخرج <span class="text-gold-metallic">معن طه</span>
+            </h2>
+        </div>
+
+        <!-- 3D Envelope Object -->
+        <div id="envelopeWrapper" class="envelope-wrapper" onclick="openEnvelope()" role="button" tabindex="0" aria-label="افتح ظرف دعوة التخرج">
+            <div class="envelope-back"></div>
+
+            <!-- Rising Mini Preview Card inside Envelope (Includes Portrait Thumbnail) -->
+            <div class="envelope-inner-card">
+                <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-gold-500 shadow mb-1 bg-royal-900">
+                    <img 
+                        id="envelopeThumbImg"
+                        src="IMG_0508.heic" 
+                        alt="معن طه" 
+                        class="w-full h-full object-cover object-top"
+                    >
+                </div>
+                <p class="font-serif text-xs text-gold-700 font-bold">جامعة المشرق</p>
+                <h3 class="font-serif text-xl sm:text-2xl font-bold text-royal-900 leading-tight">معن طه</h3>
+                <p class="text-[11px] text-royal-800 font-semibold mt-0.5">الجمعة 2026/11/27 • مجمع النخيل</p>
+            </div>
+
+            <div class="envelope-pocket"></div>
+
+            <svg class="pocket-gold-trim" viewBox="0 0 440 295" preserveAspectRatio="none">
+                <polyline points="0,0 220,159 440,0" fill="none" stroke="rgba(212,175,55,0.45)" stroke-width="1.5" />
+                <polyline points="0,295 220,141 440,295" fill="none" stroke="rgba(212,175,55,0.45)" stroke-width="1.5" />
+            </svg>
+
+            <div class="envelope-flap">
+                <div class="envelope-flap-front">
+                    <svg class="w-full h-full" viewBox="0 0 440 171" preserveAspectRatio="none">
+                        <polyline points="2,2 220,169 438,2" fill="none" stroke="rgba(212,175,55,0.65)" stroke-width="2" />
+                    </svg>
+                </div>
+                <div class="envelope-flap-back"></div>
+            </div>
+
+            <!-- Embossed Gold Wax Seal -->
+            <div class="wax-seal" title="انقر لفتح الظرف">
+                <div class="text-center leading-none text-royal-950">
+                    <span class="font-serif font-bold text-xl tracking-tighter block">م ط</span>
+                    <i class="fa-solid fa-graduation-cap text-[10px] mt-0.5 block opacity-85"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tap Prompt -->
+        <p id="tapHint" class="mt-7 text-gold-200/90 text-xs sm:text-sm flex items-center gap-2 animate-bounce">
+            <i class="fa-solid fa-hand-pointer text-gold-400"></i>
+            <span>انقر على الختم الذهبي لفتح الدعوة</span>
+        </p>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- STAGE 2: MULTI-PAGE INTERACTIVE INVITATION BOOKLET                    -->
+    <!-- ===================================================================== -->
+    <main id="bookletStage" class="booklet-container fixed inset-0 z-20 flex flex-col items-center justify-between py-3 px-3 sm:py-4 sm:px-6 opacity-0 pointer-events-none scale-95">
+        
+        <!-- Top Bar: Re-seal Envelope, Page Label & Share -->
+        <header class="w-full max-w-lg flex items-center justify-between z-30 gap-2">
+            <button onclick="closeEnvelope()" class="px-3 py-2 rounded-full royal-glass hover:bg-gold-500/20 text-gold-200 text-xs sm:text-sm transition flex items-center gap-1.5 cursor-pointer">
+                <i class="fa-solid fa-envelope text-gold-400"></i>
+                <span>الظرف</span>
+            </button>
+
+            <div class="text-xs sm:text-sm font-semibold text-gold-300 royal-glass px-3.5 py-1.5 rounded-full truncate">
+                <span id="currentPageLabel">الغلاف والترحيب</span>
+            </div>
+
+            <button onclick="copyInvitationText()" class="px-3 py-2 rounded-full royal-glass hover:bg-gold-500/20 text-gold-200 text-xs sm:text-sm transition flex items-center gap-1.5 cursor-pointer">
+                <i class="fa-brands fa-whatsapp text-gold-400 text-sm"></i>
+                <span>مشاركة</span>
+            </button>
+        </header>
+
+        <!-- 3-Page Interactive Deck Wrapper -->
+        <div id="pagesViewport" class="relative w-full max-w-lg flex-1 my-2.5 sm:my-3.5" style="perspective: 1600px;">
+
+            <!-- ============================================================= -->
+            <!-- PAGE 1: COVER & PROMINENT CRYSTAL-CLEAR GRADUATE PORTRAIT     -->
+            <!-- ============================================================= -->
+            <article id="page-1" class="page-card page-active flex flex-col justify-between p-4 sm:p-5">
+                <!-- Inner Gold Frame Border -->
+                <div class="absolute inset-2.5 rounded-2xl border border-gold-400/35 pointer-events-none z-20"></div>
+
+                <!-- Top Controls Bar (Always accessible above the portrait) -->
+                <div id="page1TopBar" class="relative z-30 flex items-center justify-between gap-2 mb-2.5">
+                    <span class="px-3 py-1 rounded-full bg-royal-900/90 border border-gold-400/45 text-gold-200 text-[11px] sm:text-xs font-bold flex items-center gap-1.5">
+                        <i class="fa-solid fa-graduation-cap text-gold-400"></i>
+                        <span>جامعة المشرق • دفعة 2026</span>
+                    </span>
+
+                    <div class="flex items-center gap-1.5">
+                        <!-- Subtle Optional Change Photo Button -->
+                        <button onclick="triggerPhotoPicker()" title="تغيير الصورة" class="px-2.5 py-1 rounded-full bg-royal-900/90 hover:bg-gold-500/20 border border-gold-400/35 text-gold-200/85 text-[11px] transition flex items-center gap-1 cursor-pointer">
+                            <i class="fa-solid fa-camera text-gold-400"></i>
+                            <span class="hidden sm:inline">تغيير الصورة</span>
+                        </button>
+
+                        <!-- Toggle Full Photo View -->
+                        <button onclick="toggleFullPhoto()" id="fullPhotoBtn" class="px-3 py-1 rounded-full bg-royal-900/90 hover:bg-gold-500/25 border border-gold-400/45 text-gold-200 text-[11px] sm:text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer">
+                            <i class="fa-regular fa-eye text-gold-400"></i>
+                            <span id="fullPhotoBtnText">إبراز الصورة كاملة</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Prominent Unobstructed Portrait Frame (Zero Dark Overlays on Face/Outfit) -->
+                <div id="portraitContainer" class="relative z-10 w-full flex-1 min-h-0 rounded-2xl overflow-hidden portrait-frame transition-all duration-500">
+                    <img 
+                        id="coverPortraitImg"
+                        src="IMG_0508.heic" 
+                        alt="صورة الخريج معن طه" 
+                        class="w-full h-full object-cover object-top block transition-transform duration-700"
+                    >
+                </div>
+
+                <!-- Clean Royal Typography Card Below Portrait (Never covers the photo!) -->
+                <div id="coverBottomInfo" class="relative z-20 mt-3 text-center transition-all duration-500">
+                    <p class="text-gold-300 font-serif text-sm sm:text-base leading-tight">
+                        ﴿ وَقُل رَّبِّ زِدْنِي عِلْمًا ﴾
+                    </p>
+                    <p class="text-ivory-100/90 text-xs tracking-wide mt-0.5">
+                        دعوة حفل تخرج الخريج
+                    </p>
+                    <h1 class="font-serif text-4xl sm:text-5xl font-bold text-gold-metallic py-0.5 leading-tight">
+                        معن طه
+                    </h1>
+                    <div class="mt-1 flex items-center justify-center gap-2 text-[11px] sm:text-xs text-ivory-200/90 font-medium">
+                        <span>الجمعة 2026/11/27</span>
+                        <span class="text-gold-400">•</span>
+                        <span>12:00 ظهراً</span>
+                        <span class="text-gold-400">•</span>
+                        <span>مجمع النخيل</span>
+                    </div>
+
+                    <button onclick="goToPage(2)" class="mt-3 w-full py-2.5 sm:py-3 rounded-2xl bg-gradient-to-r from-gold-600 via-gold-500 to-gold-600 text-royal-950 font-bold text-xs sm:text-sm shadow-lg shadow-gold-500/25 hover:brightness-110 transition flex items-center justify-center gap-2 cursor-pointer">
+                        <span>تصفّح تفاصيل الدعوة</span>
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                </div>
+            </article>
+
+            <!-- ============================================================= -->
+            <!-- PAGE 2: INVITATION MESSAGE, VENUE, TIME & LIVE COUNTDOWN      -->
+            <!-- ============================================================= -->
+            <article id="page-2" class="page-card page-next p-5 sm:p-7 flex flex-col justify-between page-scroll overflow-y-auto">
+                <div class="absolute top-3 right-3 w-7 h-7 border-t-2 border-r-2 border-gold-400/50 rounded-tr-xl pointer-events-none"></div>
+                <div class="absolute top-3 left-3 w-7 h-7 border-t-2 border-l-2 border-gold-400/50 rounded-tl-xl pointer-events-none"></div>
+
+                <div class="text-center mt-1">
+                    <div class="w-12 h-12 mx-auto rounded-2xl royal-glass flex items-center justify-center text-gold-400 mb-3 shadow-inner">
+                        <i class="fa-solid fa-scroll text-xl"></i>
+                    </div>
+                    <h2 class="font-serif text-2xl sm:text-3xl font-bold text-gold-300">نصّ الدعوة</h2>
+                    <p class="text-ivory-100/90 text-xs sm:text-sm leading-relaxed mt-3 px-1">
+                        بمشاعر يملؤها الفخر والامتنان، وبعد رحلةٍ حافلة بالجدّ والمثابرة، أتشرف بدعوتكم لمشاركتي فرحة تخرجي من
+                        <span class="text-gold-300 font-bold">جامعة المشرق</span>،
+                        لأنّ حضوركم هو أجمل ما يُتوّج هذه اللحظة ويُخلّدها في الذاكرة.
+                    </p>
+                    <p class="font-serif text-lg text-gold-400 font-bold mt-2">— أخوكم / معن طه</p>
+                </div>
+
+                <!-- Event Details Cards -->
+                <div class="grid grid-cols-3 gap-2.5 my-4 text-center">
+                    <div class="royal-glass rounded-2xl p-3">
+                        <i class="fa-regular fa-calendar-check text-gold-400 text-lg mb-1.5 block"></i>
+                        <span class="text-[11px] text-gray-300 block">التاريخ</span>
+                        <span class="font-bold text-xs sm:text-sm text-white block mt-0.5">الجمعة</span>
+                        <span class="text-gold-300 font-semibold text-[11px] block" dir="ltr">2026/11/27</span>
+                    </div>
+
+                    <div class="royal-glass rounded-2xl p-3">
+                        <i class="fa-regular fa-clock text-gold-400 text-lg mb-1.5 block"></i>
+                        <span class="text-[11px] text-gray-300 block">الوقت</span>
+                        <span class="font-bold text-xs sm:text-sm text-white block mt-0.5">12:00 ظهراً</span>
+                        <span class="text-gold-300 text-[11px] block">تماماً</span>
+                    </div>
+
+                    <div class="royal-glass rounded-2xl p-3">
+                        <i class="fa-solid fa-location-dot text-gold-400 text-lg mb-1.5 block"></i>
+                        <span class="text-[11px] text-gray-300 block">المكان</span>
+                        <span class="font-bold text-xs sm:text-sm text-white block mt-0.5">مجمع النخيل</span>
+                        <span class="text-gold-300 text-[11px] block">بغداد</span>
+                    </div>
+                </div>
+
+                <!-- Live Countdown Timer -->
+                <div class="royal-glass rounded-2xl p-4 text-center">
+                    <p class="text-xs text-gold-200 mb-2.5 font-semibold">
+                        <i class="fa-solid fa-hourglass-half text-gold-400 ml-1"></i>
+                        العدّ التنازلي للحظة التخرج
+                    </p>
+                    <div id="countdownGrid" class="grid grid-cols-4 gap-2" dir="ltr">
+                        <div class="bg-royal-950/75 rounded-xl py-2 border border-gold-400/20">
+                            <span id="days" class="block text-xl sm:text-2xl font-extrabold text-gold-400">00</span>
+                            <span class="text-[10px] text-gray-300">يوم</span>
+                        </div>
+                        <div class="bg-royal-950/75 rounded-xl py-2 border border-gold-400/20">
+                            <span id="hours" class="block text-xl sm:text-2xl font-extrabold text-gold-400">00</span>
+                            <span class="text-[10px] text-gray-300">ساعة</span>
+                        </div>
+                        <div class="bg-royal-950/75 rounded-xl py-2 border border-gold-400/20">
+                            <span id="minutes" class="block text-xl sm:text-2xl font-extrabold text-gold-400">00</span>
+                            <span class="text-[10px] text-gray-300">دقيقة</span>
+                        </div>
+                        <div class="bg-royal-950/75 rounded-xl py-2 border border-gold-400/20">
+                            <span id="seconds" class="block text-xl sm:text-2xl font-extrabold text-white">00</span>
+                            <span class="text-[10px] text-gray-300">ثانية</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendar & Waze Navigation Actions -->
+                <div class="grid grid-cols-2 gap-2.5 mt-4">
+                    <button onclick="downloadICS()" class="py-3 px-3 rounded-xl royal-glass hover:bg-gold-500/20 text-gold-200 font-semibold text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer">
+                        <i class="fa-regular fa-calendar-plus text-gold-400"></i>
+                        <span>حفظ في التقويم</span>
+                    </button>
+
+                    <a href="https://waze.com/ul/hsvzt1rxqp" target="_blank" rel="noopener noreferrer" class="py-3 px-3 rounded-xl bg-gold-500/20 hover:bg-gold-500/30 border border-gold-400/45 text-gold-200 font-semibold text-xs sm:text-sm transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-diamond-turn-right text-gold-400"></i>
+                        <span>الموقع عبر Waze</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- ============================================================= -->
+            <!-- PAGE 3: RSVP & CONGRATULATORY WISHES WALL                     -->
+            <!-- ============================================================= -->
+            <article id="page-3" class="page-card page-next p-5 sm:p-7 flex flex-col justify-between page-scroll overflow-y-auto">
+                <div>
+                    <div class="text-center mb-4">
+                        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-gold-300">تأكيد الحضور والتهاني</h2>
+                        <p class="text-xs text-gray-300 mt-1">سجّل حضورك وأرسل تهنئتك مباشرة إلى واتساب الخريج معن طه</p>
+                    </div>
+
+                    <!-- RSVP & Wish Form -->
+                    <form id="wishForm" onsubmit="handleWishSubmit(event)" class="space-y-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            <input 
+                                type="text" 
+                                id="guestName" 
+                                required 
+                                placeholder="الاسم الكريم..." 
+                                class="w-full px-3.5 py-2.5 rounded-xl bg-royal-950/85 border border-gold-400/30 text-white placeholder-gray-400 focus:outline-none focus:border-gold-400 text-xs sm:text-sm"
+                            >
+                            <select 
+                                id="attendanceStatus" 
+                                class="w-full px-3.5 py-2.5 rounded-xl bg-royal-950/85 border border-gold-400/30 text-white focus:outline-none focus:border-gold-400 text-xs sm:text-sm"
+                            >
+                                <option value="سأحضر بكل سرور">سأحضر بكل سرور</option>
+                                <option value="أعتذر عن الحضور مع أطيب التمنيات">أعتذر عن الحضور مع أطيب التمنيات</option>
+                            </select>
+                        </div>
+
+                        <textarea 
+                            id="guestMessage" 
+                            rows="2" 
+                            required 
+                            placeholder="اكتب رسالة تهنئة للخريج معن طه..." 
+                            class="w-full px-3.5 py-2.5 rounded-xl bg-royal-950/85 border border-gold-400/30 text-white placeholder-gray-400 focus:outline-none focus:border-gold-400 text-xs sm:text-sm resize-none"
+                        ></textarea>
+
+                        <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-gold-600 via-gold-500 to-gold-600 text-royal-950 font-bold text-xs sm:text-sm shadow-lg shadow-gold-500/20 hover:brightness-110 transition flex items-center justify-center gap-2 cursor-pointer">
+                            <i class="fa-brands fa-whatsapp text-base"></i>
+                            <span>إرسال التهنئة وتأكيد الحضور عبر واتساب</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Wishes List -->
+                <div class="mt-4 pt-3 border-t border-gold-400/20 flex-1 flex flex-col min-h-0">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-gold-300">
+                            <i class="fa-solid fa-sparkles text-gold-400 ml-1"></i>
+                            سجلّ التهاني
+                        </span>
+                        <span id="wishesCount" class="text-[11px] px-2 py-0.5 rounded-full bg-gold-500/15 text-gold-300">2 تهنئة</span>
+                    </div>
+
+                    <div id="wishesList" class="space-y-2 overflow-y-auto page-scroll pr-1 max-h-40 sm:max-h-48">
+                        <div class="royal-glass rounded-xl p-3">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-bold text-xs text-gold-200">عائلة معن طه</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full bg-gold-500/15 text-gold-300">سأحضر بكل سرور</span>
+                            </div>
+                            <p class="text-xs text-ivory-100/90 leading-relaxed">
+                                ألف مبارك التخرج يا معن، فخورون بك وبإنجازك في جامعة المشرق، ومنها لأعلى المراتب يا رب!
+                            </p>
+                        </div>
+
+                        <div class="royal-glass rounded-xl p-3">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-bold text-xs text-gold-200">زملاء الدفعة</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full bg-gold-500/15 text-gold-300">سأحضر بكل سرور</span>
+                            </div>
+                            <p class="text-xs text-ivory-100/90 leading-relaxed">
+                                يوم منتظر ومميز، نلتقي في مجمع النخيل - بغداد لنحتفل بأجمل خريج!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Copy Invitation Text -->
+                <button onclick="copyInvitationText()" class="mt-3 w-full py-2.5 rounded-xl royal-glass hover:bg-gold-500/20 text-gold-200 text-xs font-semibold transition flex items-center justify-center gap-2 cursor-pointer">
+                    <i class="fa-regular fa-copy text-gold-400 text-sm"></i>
+                    <span>نسخ نص الدعوة لمشاركتها عبر واتساب</span>
+                </button>
+            </article>
+
+        </div>
+
+        <!-- Bottom Navigation Bar: Previous, Page Dots, Next -->
+        <nav class="w-full max-w-lg flex items-center justify-between z-30 px-1">
+            <button id="prevPageBtn" onclick="prevPage()" class="px-4 py-2.5 rounded-2xl royal-glass hover:bg-gold-500/20 disabled:opacity-35 disabled:pointer-events-none text-gold-200 text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-chevron-right text-gold-400"></i>
+                <span>السابق</span>
+            </button>
+
+            <!-- Page Indicator Dots -->
+            <div class="flex items-center gap-2.5" role="tablist" aria-label="صفحات الدعوة">
+                <button onclick="goToPage(1)" id="dot-1" class="w-7 h-2.5 rounded-full bg-gold-400 transition-all duration-300 cursor-pointer" aria-label="الصفحة 1"></button>
+                <button onclick="goToPage(2)" id="dot-2" class="w-2.5 h-2.5 rounded-full bg-gold-400/35 hover:bg-gold-400/60 transition-all duration-300 cursor-pointer" aria-label="الصفحة 2"></button>
+                <button onclick="goToPage(3)" id="dot-3" class="w-2.5 h-2.5 rounded-full bg-gold-400/35 hover:bg-gold-400/60 transition-all duration-300 cursor-pointer" aria-label="الصفحة 3"></button>
+            </div>
+
+            <button id="nextPageBtn" onclick="nextPage()" class="px-4 py-2.5 rounded-2xl royal-glass hover:bg-gold-500/20 disabled:opacity-35 disabled:pointer-events-none text-gold-200 text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer">
+                <span>التالي</span>
+                <i class="fa-solid fa-chevron-left text-gold-400"></i>
+            </button>
+        </nav>
+    </main>
+
+    <!-- Custom Toast Notification (No alert() used) -->
+    <div id="toastNotification" class="fixed top-16 left-1/2 -translate-x-1/2 w-[90vw] max-w-sm z-50 transform -translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="royal-glass rounded-2xl p-3.5 flex items-center gap-3 border-gold-400/60 shadow-2xl bg-royal-950/90">
+            <div class="w-8 h-8 rounded-xl bg-gold-500/20 flex items-center justify-center text-gold-400 shrink-0">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <p id="toastMessage" class="text-xs sm:text-sm text-white font-medium leading-snug"></p>
+        </div>
+    </div>
+
+    <script>
+        // =========================================================================
+        // 1. 3D ENVELOPE OPEN / CLOSE INTERACTION + SUBTLE ROYAL SOUND EFFECT
+        // =========================================================================
+        let isEnvelopeOpened = false;
+
+        async function playRoyalChime() {
+            try {
+                if (typeof Tone !== 'undefined') {
+                    await Tone.start();
+                    const synth = new Tone.PolySynth(Tone.Synth, {
+                        oscillator: { type: 'sine' },
+                        envelope: { attack: 0.04, decay: 0.4, sustain: 0.2, release: 1.4 }
+                    }).toDestination();
+                    synth.volume.value = -12;
+                    const now = Tone.now();
+                    synth.triggerAttackRelease('C5', '8n', now);
+                    synth.triggerAttackRelease('E5', '8n', now + 0.12);
+                    synth.triggerAttackRelease('G5', '4n', now + 0.24);
+                    synth.triggerAttackRelease('B5', '2n', now + 0.38);
+                }
+            } catch (e) {
+                // Audio context blocked or unsupported
+            }
+        }
+
+        function openEnvelope() {
+            if (isEnvelopeOpened) return;
+            isEnvelopeOpened = true;
+
+            const wrapper = document.getElementById('envelopeWrapper');
+            const envelopeStage = document.getElementById('envelopeStage');
+            const bookletStage = document.getElementById('bookletStage');
+
+            wrapper.classList.add('is-open');
+            playRoyalChime();
+            triggerConfettiBurst(65);
+
+            setTimeout(() => {
+                envelopeStage.classList.add('opacity-0', 'scale-110', 'pointer-events-none');
+                bookletStage.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
+                bookletStage.classList.add('opacity-100', 'scale-100');
+            }, 1150);
+        }
+
+        function closeEnvelope() {
+            isEnvelopeOpened = false;
+            const wrapper = document.getElementById('envelopeWrapper');
+            const envelopeStage = document.getElementById('envelopeStage');
+            const bookletStage = document.getElementById('bookletStage');
+
+            if (isFullPhotoActive) toggleFullPhoto();
+
+            bookletStage.classList.remove('opacity-100', 'scale-100');
+            bookletStage.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+
+            setTimeout(() => {
+                envelopeStage.classList.remove('opacity-0', 'scale-110', 'pointer-events-none');
+                setTimeout(() => {
+                    wrapper.classList.remove('is-open');
+                }, 150);
+            }, 400);
+        }
+
+        document.getElementById('envelopeWrapper').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openEnvelope();
+            }
+        });
+
+        // =========================================================================
+        // 2. MULTI-PAGE NAVIGATION (BUTTONS, DOTS, SWIPE & KEYBOARD)
+        // =========================================================================
+        let currentPage = 1;
+        const totalPages = 3;
+        const pageTitles = {
+            1: 'الغلاف والترحيب',
+            2: 'تفاصيل الحفل والعدّاد',
+            3: 'تأكيد الحضور والتهاني'
+        };
+
+        function goToPage(pageNumber) {
+            if (pageNumber < 1 || pageNumber > totalPages) return;
+            currentPage = pageNumber;
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageEl = document.getElementById(`page-${i}`);
+                const dotEl = document.getElementById(`dot-${i}`);
+
+                pageEl.classList.remove('page-active', 'page-next', 'page-prev');
+                if (i === currentPage) {
+                    pageEl.classList.add('page-active');
+                    dotEl.className = 'w-7 h-2.5 rounded-full bg-gold-400 transition-all duration-300 cursor-pointer';
+                } else if (i > currentPage) {
+                    pageEl.classList.add('page-next');
+                    dotEl.className = 'w-2.5 h-2.5 rounded-full bg-gold-400/35 hover:bg-gold-400/60 transition-all duration-300 cursor-pointer';
+                } else {
+                    pageEl.classList.add('page-prev');
+                    dotEl.className = 'w-2.5 h-2.5 rounded-full bg-gold-400/35 hover:bg-gold-400/60 transition-all duration-300 cursor-pointer';
+                }
+            }
+
+            document.getElementById('currentPageLabel').textContent = pageTitles[currentPage];
+            document.getElementById('prevPageBtn').disabled = (currentPage === 1);
+            document.getElementById('nextPageBtn').disabled = (currentPage === totalPages);
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) goToPage(currentPage + 1);
+        }
+
+        function prevPage() {
+            if (currentPage > 1) goToPage(currentPage - 1);
+        }
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const viewport = document.getElementById('pagesViewport');
+
+        viewport.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        viewport.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const deltaX = touchEndX - touchStartX;
+            if (Math.abs(deltaX) > 55) {
+                if (deltaX > 0) {
+                    nextPage();
+                } else {
+                    prevPage();
+                }
+            }
+        }, { passive: true });
+
+        goToPage(1);
+
+        // =========================================================================
+        // 3. FULL PORTRAIT TOGGLE & OPTIONAL LOCAL PHOTO SWAP
+        // =========================================================================
+        let isFullPhotoActive = false;
+        function toggleFullPhoto() {
+            isFullPhotoActive = !isFullPhotoActive;
+            const bottomInfo = document.getElementById('coverBottomInfo');
+            const btnText = document.getElementById('fullPhotoBtnText');
+
+            if (isFullPhotoActive) {
+                bottomInfo.classList.add('hidden');
+                btnText.textContent = 'إظهار النصوص';
+            } else {
+                bottomInfo.classList.remove('hidden');
+                btnText.textContent = 'إبراز الصورة كاملة';
+            }
+        }
+
+        function triggerPhotoPicker() {
+            document.getElementById('photoUploadInput').click();
+        }
+
+        function handleLocalPhotoChange(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const dataUrl = e.target.result;
+                document.getElementById('coverPortraitImg').src = dataUrl;
+                document.getElementById('ambientBgImg').src = dataUrl;
+                document.getElementById('envelopeThumbImg').src = dataUrl;
+                document.getElementById('portraitContainer').style.backgroundImage = `url('${dataUrl}')`;
+                document.getElementById('ambientPhotoBg').style.backgroundImage = `url('${dataUrl}')`;
+                showToast('تم تحديث الصورة بنجاح ✨');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // =========================================================================
+        // 4. LIVE COUNTDOWN TIMER TO FRIDAY 2026/11/27 AT 12:00 PM (UTC+3)
+        // =========================================================================
+        const targetDate = new Date('2026-11-27T12:00:00+03:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance <= 0) {
+                document.getElementById('countdownGrid').innerHTML = `
+                    <div class="col-span-4 py-2.5 px-3 rounded-xl bg-gold-500/20 border border-gold-400/40 text-gold-200 font-bold text-xs sm:text-sm">
+                        حان وقت الاحتفال بتخرج معن طه! ألف مبارك
+                    </div>
+                `;
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // =========================================================================
+        // 5. CALENDAR (.ICS) DOWNLOAD & WHATSAPP / CLIPBOARD SHARE
+        // =========================================================================
+        function downloadICS() {
+            const icsContent = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'PRODID:-//Maan Taha Graduation//AR',
+                'BEGIN:VEVENT',
+                'DTSTART:20261127T090000Z',
+                'DTEND:20261127T120000Z',
+                'SUMMARY:حفل تخرج معن طه - جامعة المشرق',
+                'DESCRIPTION:دعوة لحضور حفل تخرج معن طه من جامعة المشرق في مجمع النخيل - بغداد الساعة 12:00 ظهراً. رابط الموقع: https://waze.com/ul/hsvzt1rxqp',
+                'LOCATION:مجمع النخيل - بغداد (https://waze.com/ul/hsvzt1rxqp)',
+                'END:VEVENT',
+                'END:VCALENDAR'
+            ].join('\r\n');
+
+            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download', 'Maan_Taha_Graduation_2026.ics');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showToast('تم تحميل ملف الموعد لإضافته إلى تقويم هاتفك');
+        }
+
+        function copyInvitationText() {
+            const text = `🎓 دعوة حفل تخرج 🎓\n` +
+                `يسرّني دعوتكم لحضور حفل تخرجي من جامعة المشرق\n` +
+                `الخريج: معن طه\n` +
+                `📅 التاريخ: الجمعة 2026/11/27\n` +
+                `🕛 الوقت: الساعة 12:00 ظهراً\n` +
+                `📍 المكان: مجمع النخيل - بغداد\n` +
+                `🗺️ موقع الحفل على Waze:\nhttps://waze.com/ul/hsvzt1rxqp\n` +
+                `حضوركم يزيد فرحتي بهاءً ✨`;
+
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.opacity = '0';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                document.execCommand('copy');
+                showToast('تم نسخ نص الدعوة! يمكنك لصقها ومشاركتها عبر واتساب الآن.');
+            } catch (err) {
+                showToast('تعذر النسخ التلقائي، يرجى نسخ التفاصيل يدوياً.');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // =========================================================================
+        // 6. RSVP & CONGRATULATORY WISHES WALL -> WHATSAPP (+9647831713480)
+        // =========================================================================
+        const STORAGE_KEY = 'maan_taha_booklet_wishes_v2';
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag]));
+        }
+
+        function appendWishCard(name, status, message, prepend = true) {
+            const list = document.getElementById('wishesList');
+            const card = document.createElement('div');
+            card.className = 'royal-glass rounded-xl p-3 border-gold-400/40';
+            card.innerHTML = `
+                <div class="flex items-center justify-between mb-1">
+                    <span class="font-bold text-xs text-gold-200">${escapeHTML(name)}</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-gold-500/15 text-gold-300">${escapeHTML(status)}</span>
+                </div>
+                <p class="text-xs text-ivory-100/90 leading-relaxed">${escapeHTML(message)}</p>
+            `;
+            if (prepend) {
+                list.insertBefore(card, list.firstChild);
+            } else {
+                list.appendChild(card);
+            }
+        }
+
+        function updateWishesCount() {
+            const count = document.getElementById('wishesList').children.length;
+            document.getElementById('wishesCount').textContent = `${count} تهنئة`;
+        }
+
+        function loadWishes() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                saved.forEach(w => appendWishCard(w.name, w.status, w.message, false));
+                updateWishesCount();
+            } catch (e) {}
+        }
+
+        function handleWishSubmit(event) {
+            event.preventDefault();
+            const nameInput = document.getElementById('guestName');
+            const statusInput = document.getElementById('attendanceStatus');
+            const msgInput = document.getElementById('guestMessage');
+
+            const name = nameInput.value.trim();
+            const status = statusInput.value;
+            const message = msgInput.value.trim();
+            if (!name || !message) return;
+
+            appendWishCard(name, status, message, true);
+            updateWishesCount();
+            triggerConfettiBurst(45);
+
+            try {
+                const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                saved.push({ name, status, message });
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+            } catch (e) {}
+
+            // Direct WhatsApp message to Maan Taha (+9647831713480)
+            const whatsappPhone = '9647831713480';
+            const whatsappText =
+                `🎓 *تأكيد حضور وتهنئة تخرج* 🎓\n\n` +
+                `إلى الخريج: *معن طه* (جامعة المشرق)\n` +
+                `👤 *الاسم:* ${name}\n` +
+                `📌 *حالة الحضور:* ${status}\n` +
+                `💌 *رسالة التهنئة:*\n"${message}"\n\n` +
+                `ألف مبارك التخرج ومنها لأعلى المراتب ✨`;
+
+            const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappText)}`;
+
+            nameInput.value = '';
+            msgInput.value = '';
+            showToast(`شكراً لك يا ${name}! جاري تحويلك إلى واتساب لإرسال التهنئة...`);
+
+            setTimeout(() => {
+                window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+            }, 400);
+        }
+
+        // =========================================================================
+        // 7. TOAST NOTIFICATION SYSTEM
+        // =========================================================================
+        let toastTimer;
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.classList.remove('-translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('-translate-y-24', 'opacity-0');
+            }, 3400);
+        }
+
+        // =========================================================================
+        // 8. AMBIENT GOLD DUST & CELEBRATORY CONFETTI CANVAS
+        // =========================================================================
+        const canvas = document.getElementById('confettiCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(isBurst = false) {
+                this.isBurst = isBurst;
+                if (isBurst) {
+                    this.x = canvas.width / 2;
+                    this.y = canvas.height * 0.48;
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = Math.random() * 6.5 + 2;
+                    this.vx = Math.cos(angle) * speed;
+                    this.vy = Math.sin(angle) * speed - 2.5;
+                    this.w = Math.random() * 6 + 3;
+                    this.h = Math.random() * 3.5 + 2;
+                    this.rotation = Math.random() * 360;
+                    this.rotSpeed = (Math.random() - 0.5) * 10;
+                    this.alpha = 1;
+                    this.decay = Math.random() * 0.014 + 0.008;
+                    this.color = Math.random() > 0.35 ? '#d4af37' : '#fdfbf7';
+                } else {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = (Math.random() - 0.5) * 0.3;
+                    this.vy = -(Math.random() * 0.4 + 0.12);
+                    this.w = Math.random() * 2.5 + 1;
+                    this.h = this.w;
+                    this.rotation = 0;
+                    this.rotSpeed = 0;
+                    this.alpha = Math.random() * 0.45 + 0.15;
+                    this.decay = 0;
+                    this.color = '#d4af37';
+                }
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.rotation += this.rotSpeed;
+
+                if (this.isBurst) {
+                    this.vy += 0.11;
+                    this.vx *= 0.985;
+                    this.alpha -= this.decay;
+                } else {
+                    if (this.y < -10) {
+                        this.y = canvas.height + 10;
+                        this.x = Math.random() * canvas.width;
+                    }
+                }
+            }
+
+            draw() {
+                if (this.alpha <= 0) return;
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.translate(this.x, this.y);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 6;
+                ctx.shadowColor = '#d4af37';
+                if (this.isBurst) {
+                    ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.w, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+        }
+
+        function initAmbientParticles() {
+            particles = [];
+            const count = window.innerWidth < 640 ? 25 : 42;
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle(false));
+            }
+        }
+
+        function triggerConfettiBurst(amount = 50) {
+            for (let i = 0; i < amount; i++) {
+                particles.push(new Particle(true));
+            }
+        }
+
+        function animateLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles = particles.filter(p => !p.isBurst || p.alpha > 0);
+            for (const p of particles) {
+                p.update();
+                p.draw();
+            }
+            requestAnimationFrame(animateLoop);
+        }
+
+        window.onload = function () {
+            initAmbientParticles();
+            animateLoop();
+            loadWishes();
+        };
+    </script>
+</body>
+</html>
